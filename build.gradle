@@ -1,7 +1,7 @@
 plugins {
-	id 'eclipse'
+    id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
@@ -13,47 +13,34 @@ archivesBaseName = project.mod_id
 java.toolchain.languageVersion = JavaLanguageVersion.of(project.java_version)
 
 minecraft {
-    mappings channel: 'parchment', version: '2022.12.18-1.19.3'
+    mappings channel: 'parchment', version: project.parchment_version
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
-    	client {
-    		workingDirectory project.file('run')
+        configureEach {
+            workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            
+
             mods {
-                inventoryactions {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
-    	}
-    	
-    	server {
-    		workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            
-            mods {
-                inventoryactions {
-                    source sourceSets.main
-                }
-            }
-    	}
-        
+        }
+
+        client {
+            property 'forge.enabledGameTestNamespaces', mod_id
+        }
+
+        server {
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
+        }
+
         data {
-        	workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            
             args '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            
-            mods {
-                inventoryactions {
-                    source sourceSets.main
-                }
-            }
         }
     }
 }
@@ -63,17 +50,17 @@ mixin {
     config 'inventoryactions.mixins.json'
 }
 
-sourceSets.main.resources { 
-	srcDir 'src/generated/resources'
-	exclude '.cache'
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    exclude '.cache'
 }
 
 repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:' + project.mc_version + '-' + project.forge_version
-    
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
@@ -87,30 +74,30 @@ jar {
             'Implementation-Vendor'   : project.author,
             'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
     ])
-    
+
     finalizedBy 'reobfJar'
 }
 
 task apiJar(type: Jar) {
-	dependsOn(classes)
-	include "${project.author}/${project.mod_id}/api/**"
+    dependsOn(classes)
+    include "${project.author}/${project.mod_id}/api/**"
     from sourceSets.main.allSource
     from sourceSets.main.output
-    classifier = 'api'
+//    classifier = 'api'
 }
 
 task sourcesJar(type: Jar) {
-	dependsOn(classes)
-	classifier = 'sources'
-	from sourceSets.main.allJava
+    dependsOn(classes)
+//    classifier = 'sources'
+    from sourceSets.main.allJava
 }
 
 tasks.build.dependsOn apiJar, sourcesJar
 
 artifacts {
-	archives apiJar
-	archives sourcesJar
-	archives jar
+    archives apiJar
+    archives sourcesJar
+    archives jar
 }
 
 tasks.withType(JavaCompile) {
