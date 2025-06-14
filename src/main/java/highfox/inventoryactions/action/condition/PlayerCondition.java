@@ -15,7 +15,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.player.Player;
@@ -26,6 +25,8 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.DistExecutor;
 
 import java.util.Optional;
+
+import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
 
 public class PlayerCondition implements IActionCondition {
     private final Optional<ResourceKey<Level>> dimension;
@@ -95,7 +96,7 @@ public class PlayerCondition implements IActionCondition {
 
         @Override
         public PlayerCondition fromJson(JsonObject json, JsonDeserializationContext context) {
-            ResourceKey<Level> dimension = json.has("dimension") ? ResourceKey.create(Registries.DIMENSION, new ResourceLocation(GsonHelper.getAsString(json, "dimension"))) : null;
+            ResourceKey<Level> dimension = json.has("dimension") ? ResourceKey.create(Registries.DIMENSION, parseId(GsonHelper.getAsString(json, "dimension"))) : null;
             GameType gameMode = json.has("game_mode") ? GameType.byName(GsonHelper.getAsString(json, "game_mode")) : null;
             MinMaxBounds.Ints experienceLevel = json.has("experience_level") ? SerializationUtils.getAsIntRange(json, "experience_level") : null;
             CompoundTag nbt = json.has("nbt") ? CraftingHelper.getNBT(json.get("nbt")) : null;

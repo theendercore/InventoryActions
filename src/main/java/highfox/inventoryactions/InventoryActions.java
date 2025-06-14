@@ -6,7 +6,6 @@ import highfox.inventoryactions.action.function.provider.ItemProviderTypes;
 import highfox.inventoryactions.api.util.ActionsConstants;
 import highfox.inventoryactions.data.ActionsManager;
 import highfox.inventoryactions.network.ActionsNetwork;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.sounds.SoundEvent;
@@ -28,10 +27,12 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import static highfox.inventoryactions.api.util.ActionsConstants.modId;
+
 @Mod(ActionsConstants.MODID)
 public class InventoryActions {
     private static final DeferredRegister<SoundEvent> DEFERRED_SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, ActionsConstants.MODID);
-    public static final RegistryObject<SoundEvent> SOLIDIFY_CONCRETE = DEFERRED_SOUND_EVENTS.register("solidify_concrete", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(ActionsConstants.MODID, "solidify_concrete")));
+    public static final RegistryObject<SoundEvent> SOLIDIFY_CONCRETE = DEFERRED_SOUND_EVENTS.register("solidify_concrete", () -> SoundEvent.createVariableRangeEvent(modId("solidify_concrete")));
 
     public InventoryActions() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ActionConfig.GENERAL_SPEC, "inventory-actions.toml");

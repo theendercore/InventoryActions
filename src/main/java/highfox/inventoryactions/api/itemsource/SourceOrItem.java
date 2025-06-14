@@ -5,11 +5,12 @@ import com.google.gson.JsonSyntaxException;
 import com.mojang.datafixers.util.Either;
 import highfox.inventoryactions.api.action.IActionContext;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
 
 /**
  * Contains either an item source or an item holder
@@ -50,7 +51,7 @@ public record SourceOrItem(Either<IItemSource, Holder<Item>> either) {
         if (ItemSources.isValidSource(name)) {
             return SourceOrItem.ofSource(ItemSources.getSource(name));
         } else {
-            return SourceOrItem.ofItem(ForgeRegistries.ITEMS.getDelegate(new ResourceLocation(name)).orElseThrow(() -> {
+            return SourceOrItem.ofItem(ForgeRegistries.ITEMS.getDelegate(parseId(name)).orElseThrow(() -> {
                 return new JsonSyntaxException(name + " is neither a valid item name or valid item source");
             }));
         }

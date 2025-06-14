@@ -1,7 +1,6 @@
 package highfox.inventoryactions.api.itemmap;
 
 import com.google.common.collect.ImmutableMap;
-import highfox.inventoryactions.api.util.ActionsConstants;
 import it.unimi.dsi.fastutil.objects.Object2ReferenceMap;
 import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
@@ -20,6 +19,8 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static highfox.inventoryactions.api.util.ActionsConstants.modId;
+
 /**
  * Registry of item maps that can be referenced by name
  */
@@ -37,7 +38,7 @@ public class BuiltInItemMaps {
     }
 
     private static Supplier<ItemMap> register(String name, Supplier<ItemMap> supplier) {
-        return register(new ResourceLocation(ActionsConstants.MODID, name), supplier);
+        return register(modId(name), supplier);
     }
 
     /**

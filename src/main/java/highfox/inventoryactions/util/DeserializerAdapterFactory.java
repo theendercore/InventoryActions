@@ -11,6 +11,8 @@ import javax.annotation.Nullable;
 import java.lang.reflect.Type;
 import java.util.function.Function;
 
+import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
+
 // Adapted from GsonAdapterFactory
 public class DeserializerAdapterFactory {
     public static <E, T extends TypeDeserializer<E>> Builder<E, T> builder(IForgeRegistry<T> registry, String elementName, String typeKey, Function<E, T> typeGetter) {
@@ -81,7 +83,7 @@ public class DeserializerAdapterFactory {
                 if (s.isEmpty()) {
                     t = this.defaultType;
                 } else {
-                    ResourceLocation resourcelocation = new ResourceLocation(s);
+                    ResourceLocation resourcelocation = parseId(s);
                     t = this.registry.getValue(resourcelocation);
                 }
 

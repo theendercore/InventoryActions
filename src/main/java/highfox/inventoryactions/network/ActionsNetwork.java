@@ -1,10 +1,8 @@
 package highfox.inventoryactions.network;
 
-import highfox.inventoryactions.api.util.ActionsConstants;
 import highfox.inventoryactions.network.message.IMessage;
 import highfox.inventoryactions.network.message.SyncActionsMessage;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
@@ -16,10 +14,12 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static highfox.inventoryactions.api.util.ActionsConstants.modId;
+
 public class ActionsNetwork {
     private static final String VERSION = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(ActionsConstants.MODID, "action_syncing"),
+            modId("action_syncing"),
             () -> "1",
             VERSION::equals,
             VERSION::equals

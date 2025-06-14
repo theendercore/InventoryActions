@@ -21,6 +21,8 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.function.Supplier;
 
+import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
+
 public class PlaySoundFunction implements IActionFunction {
     private final Holder<SoundEvent> sound;
     private final SoundSource category;
@@ -53,7 +55,7 @@ public class PlaySoundFunction implements IActionFunction {
 
         @Override
         public PlaySoundFunction fromJson(JsonObject json, JsonDeserializationContext context) {
-            ResourceLocation soundName = new ResourceLocation(GsonHelper.getAsString(json, "sound"));
+            ResourceLocation soundName = parseId(GsonHelper.getAsString(json, "sound"));
             Reference<SoundEvent> sound = ForgeRegistries.SOUND_EVENTS.getDelegate(soundName).orElseThrow(() -> {
                 return new IllegalArgumentException("Unknown sound event: " + soundName);
             });

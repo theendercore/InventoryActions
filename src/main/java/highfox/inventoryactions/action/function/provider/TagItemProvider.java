@@ -9,7 +9,6 @@ import highfox.inventoryactions.api.itemprovider.LootFunctionsProvider;
 import highfox.inventoryactions.api.util.LootParams;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.Util;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
@@ -23,6 +22,8 @@ import net.minecraftforge.registries.tags.ITagManager;
 
 import java.util.Optional;
 import java.util.function.Supplier;
+
+import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
 
 public class TagItemProvider extends LootFunctionsProvider {
     private final TagKey<Item> tagKey;
@@ -70,7 +71,7 @@ public class TagItemProvider extends LootFunctionsProvider {
 
         @Override
         public TagItemProvider fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, LootParams params) {
-            TagKey<Item> tagKey = TagKey.create(ForgeRegistries.Keys.ITEMS, new ResourceLocation(GsonHelper.getAsString(json, "tag")));
+            TagKey<Item> tagKey = TagKey.create(ForgeRegistries.Keys.ITEMS, parseId(GsonHelper.getAsString(json, "tag")));
             Optional<NumberProvider> amountProvider = Optional.ofNullable(GsonHelper.getAsObject(json, "amount", null, context, NumberProvider.class));
 
             return new TagItemProvider(functions, params, tagKey, amountProvider);

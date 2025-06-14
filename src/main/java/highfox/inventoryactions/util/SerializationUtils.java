@@ -25,6 +25,8 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
+
 @SuppressWarnings("serial")
 public class SerializationUtils {
     public static final Type CONDITION_LIST_TYPE = new TypeToken<ImmutableList<IActionCondition>>() {
@@ -50,7 +52,7 @@ public class SerializationUtils {
 
     public static BlockState convertToBlockState(JsonElement json) {
         JsonObject object = GsonHelper.convertToJsonObject(json, "blockstate");
-        ResourceLocation blockName = new ResourceLocation(GsonHelper.getAsString(object, "Name"));
+        ResourceLocation blockName = parseId(GsonHelper.getAsString(object, "Name"));
         Block block = ForgeRegistries.BLOCKS.getDelegate(blockName).map(Reference::get).orElseThrow(() -> {
             return new IllegalArgumentException("Unknown block " + blockName);
         });

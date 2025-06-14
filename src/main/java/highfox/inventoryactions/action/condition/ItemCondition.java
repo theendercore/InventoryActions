@@ -21,6 +21,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
+
 public class ItemCondition extends ItemSourcingCondition {
     private final List<ResourceLocation> items;
     private final Optional<Pattern> namespacePattern;
@@ -72,7 +74,7 @@ public class ItemCondition extends ItemSourcingCondition {
             List<ResourceLocation> items = Optional.ofNullable(GsonHelper.getAsJsonArray(json, "items", null)).map(itemNames -> {
                 ImmutableList.Builder<ResourceLocation> builder = ImmutableList.builderWithExpectedSize(itemNames.size());
                 for (JsonElement element : itemNames) {
-                    ResourceLocation name = new ResourceLocation(GsonHelper.convertToString(element, "item"));
+                    ResourceLocation name = parseId(GsonHelper.convertToString(element, "item"));
                     if (!ForgeRegistries.ITEMS.containsKey(name)) {
                         throw new JsonSyntaxException("Unknown item: " + name);
                     } else {

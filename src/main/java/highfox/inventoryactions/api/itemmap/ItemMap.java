@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static highfox.inventoryactions.api.util.ActionsConstants.id;
+import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
+
 /**
  * An immutable collection of mapped pairs of item names
  */
@@ -154,8 +157,8 @@ public class ItemMap {
                 JsonObject object = json.getAsJsonObject();
                 Map<ResourceLocation, ResourceLocation> map = new HashMap<>(object.size());
                 json.getAsJsonObject().entrySet().stream().forEach(entry -> {
-                    ResourceLocation key = new ResourceLocation(entry.getKey());
-                    ResourceLocation value = new ResourceLocation(GsonHelper.convertToString(entry.getValue(), "item map value"));
+                    ResourceLocation key = parseId(entry.getKey());
+                    ResourceLocation value = parseId(GsonHelper.convertToString(entry.getValue(), "item map value"));
 
                     if (!ForgeRegistries.ITEMS.containsKey(key) || !ForgeRegistries.ITEMS.containsKey(value)) {
                         throw new IllegalArgumentException("Unknown item: " + (!ForgeRegistries.ITEMS.containsKey(key) ? key : value));
@@ -181,7 +184,7 @@ public class ItemMap {
                 }
             }
 
-            return new ResourceLocation(parts[0], parts[1]);
+            return id(parts[0], parts[1]);
         }
 
     }

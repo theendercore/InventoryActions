@@ -17,6 +17,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
+
 public class SimpleItemProvider extends LootFunctionsProvider {
     protected final Holder<Item> item;
 
@@ -39,7 +41,7 @@ public class SimpleItemProvider extends LootFunctionsProvider {
 
         @Override
         public SimpleItemProvider fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, LootParams params) {
-            ResourceLocation itemName = new ResourceLocation(GsonHelper.getAsString(json, "item"));
+            ResourceLocation itemName = parseId(GsonHelper.getAsString(json, "item"));
             Reference<Item> holder = ForgeRegistries.ITEMS.getDelegate(itemName).orElseThrow(() -> {
                 return new IllegalArgumentException("Unknown item: " + itemName);
             });

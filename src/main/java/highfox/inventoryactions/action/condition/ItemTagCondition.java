@@ -19,6 +19,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
+import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
+
 public class ItemTagCondition extends ItemSourcingCondition {
     private final List<TagKey<Item>> tags;
 
@@ -52,7 +54,7 @@ public class ItemTagCondition extends ItemSourcingCondition {
 
             ImmutableList.Builder<TagKey<Item>> tags = ImmutableList.builderWithExpectedSize(tagNames.size());
             for (JsonElement element : tagNames) {
-                ResourceLocation name = new ResourceLocation(GsonHelper.convertToString(element, "tag"));
+                ResourceLocation name = parseId(GsonHelper.convertToString(element, "tag"));
 
                 tags.add(TagKey.create(ForgeRegistries.Keys.ITEMS, name));
             }

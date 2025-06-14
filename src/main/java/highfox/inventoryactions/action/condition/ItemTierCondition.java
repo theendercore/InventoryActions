@@ -26,6 +26,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
+
 public class ItemTierCondition extends ItemSourcingCondition {
     private final Optional<Tier> minimumTier;
     private final Optional<Tier> maximumTier;
@@ -126,7 +128,7 @@ public class ItemTierCondition extends ItemSourcingCondition {
         }
 
         private Optional<Tier> getTier(JsonElement element) {
-            ResourceLocation tierName = new ResourceLocation(GsonHelper.convertToString(element, "tier"));
+            ResourceLocation tierName = parseId(GsonHelper.convertToString(element, "tier"));
             Tier tier = TierSortingRegistry.byName(tierName);
 
             if (tier != null) {

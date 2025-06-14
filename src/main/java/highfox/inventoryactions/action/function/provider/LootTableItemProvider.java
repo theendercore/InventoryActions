@@ -16,6 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 
+import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
+
 public class LootTableItemProvider implements IItemProvider {
     private final ResourceLocation tableLocation;
     private final LootParams params;
@@ -46,7 +48,7 @@ public class LootTableItemProvider implements IItemProvider {
 
         @Override
         public LootTableItemProvider fromJson(JsonObject json, JsonDeserializationContext context) {
-            ResourceLocation tableLocation = new ResourceLocation(GsonHelper.getAsString(json, "loot_table"));
+            ResourceLocation tableLocation = parseId(GsonHelper.getAsString(json, "loot_table"));
             LootParams params = LootParams.fromJson(json);
 
             return new LootTableItemProvider(tableLocation, params);
