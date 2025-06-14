@@ -8,7 +8,7 @@ import highfox.inventoryactions.api.itemprovider.ItemProviderType;
 import highfox.inventoryactions.api.itemprovider.LootFunctionsProvider;
 import highfox.inventoryactions.api.itemsource.IItemSource;
 import highfox.inventoryactions.api.itemsource.ItemSources;
-import highfox.inventoryactions.api.util.LootParams;
+import highfox.inventoryactions.api.util.ExtraLootParams;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -26,7 +26,7 @@ public class MappedItemProvider extends LootFunctionsProvider {
     private final IItemSource source;
     private final ItemMap itemMap;
 
-    public MappedItemProvider(LootItemFunction[] modifiers, LootParams params, IItemSource source, ItemMap itemMap) {
+    public MappedItemProvider(LootItemFunction[] modifiers, ExtraLootParams params, IItemSource source, ItemMap itemMap) {
         super(modifiers, params);
         this.source = source;
         this.itemMap = itemMap;
@@ -50,7 +50,7 @@ public class MappedItemProvider extends LootFunctionsProvider {
     public static class Deserializer extends BaseSerializer<MappedItemProvider> {
 
         @Override
-        public MappedItemProvider fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, LootParams params) {
+        public MappedItemProvider fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, ExtraLootParams params) {
             IItemSource source = ItemSources.fromJson(json.get("source"));
             ItemMap itemMap = GsonHelper.getAsObject(json, "item_map", context, ItemMap.class);
 

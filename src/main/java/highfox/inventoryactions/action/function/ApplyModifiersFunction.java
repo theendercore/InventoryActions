@@ -9,7 +9,7 @@ import highfox.inventoryactions.api.function.ActionFunctionType;
 import highfox.inventoryactions.api.function.ItemSourcingFunction;
 import highfox.inventoryactions.api.itemsource.IItemSource;
 import highfox.inventoryactions.api.util.ActionsConstants;
-import highfox.inventoryactions.api.util.LootParams;
+import highfox.inventoryactions.api.util.ExtraLootParams;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
@@ -24,9 +24,9 @@ import java.util.Set;
 
 public class ApplyModifiersFunction extends ItemSourcingFunction {
     private final LootItemFunction[] functions;
-    private final LootParams params;
+    private final ExtraLootParams params;
 
-    public ApplyModifiersFunction(IItemSource source, LootItemFunction[] functions, LootParams params) {
+    public ApplyModifiersFunction(IItemSource source, LootItemFunction[] functions, ExtraLootParams params) {
         super(source);
         this.functions = functions;
         this.params = params;
@@ -79,7 +79,7 @@ public class ApplyModifiersFunction extends ItemSourcingFunction {
         @Override
         public ApplyModifiersFunction fromJson(JsonObject json, JsonDeserializationContext context, IItemSource source) {
             LootItemFunction[] functions = context.deserialize(GsonHelper.getAsJsonArray(json, "functions"), LootItemFunction[].class);
-            LootParams params = LootParams.fromJson(json);
+            ExtraLootParams params = ExtraLootParams.fromJson(json);
 
             return new ApplyModifiersFunction(source, functions, params);
         }

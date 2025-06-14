@@ -74,12 +74,12 @@ public class ActionContext implements IActionContext {
         if (this.getLevel().isClientSide()) {
             throw new IllegalStateException("Attempted to create loot context on the client");
         }
-        LootContext.Builder builder = new LootContext.Builder(getVanillaLootPrams(tool, blockState));
+        LootContext.Builder builder = new LootContext.Builder(getLootPrams(tool, blockState));
         return builder.create(null);
     }
 
     @Override
-    public LootParams getVanillaLootPrams(ItemStack tool, BlockState blockState) {
+    public LootParams getLootPrams(ItemStack tool, BlockState blockState) {
         if (this.getLevel().isClientSide()) {
             throw new IllegalStateException("Attempted to create loot context on the client");
         }

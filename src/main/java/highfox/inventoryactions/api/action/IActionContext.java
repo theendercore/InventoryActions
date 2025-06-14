@@ -93,6 +93,6 @@ public interface IActionContext {
      * @return loot params
      * @throws IllegalStateException if called on the client
      */
-    LootParams getVanillaLootPrams(ItemStack tool, BlockState blockState);
+    LootParams getLootPrams(ItemStack tool, BlockState blockState);
 
 }

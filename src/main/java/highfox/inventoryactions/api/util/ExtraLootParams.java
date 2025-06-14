@@ -16,11 +16,11 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 
 import java.util.Optional;
 
-public class LootParams {
+public class ExtraLootParams {
     private final Optional<IItemSource> toolParam;
     private final Optional<BlockState> blockStateParam;
 
-    public LootParams(Optional<IItemSource> toolParam, Optional<BlockState> blockStateParam) {
+    public ExtraLootParams(Optional<IItemSource> toolParam, Optional<BlockState> blockStateParam) {
         this.toolParam = toolParam;
         this.blockStateParam = blockStateParam;
     }
@@ -43,24 +43,24 @@ public class LootParams {
     }
 
     @SuppressWarnings("deprecation")
-    public static LootParams fromNetwork(FriendlyByteBuf buffer) {
+    public static ExtraLootParams fromNetwork(FriendlyByteBuf buffer) {
         Optional<IItemSource> tool = buffer.readOptional(ItemSources::fromNetwork);
         Optional<BlockState> blockState = buffer.readOptional(buf -> {
             HolderGetter<Block> holderGetter = BuiltInRegistries.BLOCK.asLookup();
             return NbtUtils.readBlockState(holderGetter, buf.readAnySizeNbt());
         });
 
-        return new LootParams(tool, blockState);
+        return new ExtraLootParams(tool, blockState);
     }
 
     @SuppressWarnings("deprecation")
-    public static LootParams fromJson(JsonObject json) {
+    public static ExtraLootParams fromJson(JsonObject json) {
         Optional<IItemSource> tool = Optional.ofNullable(json.has("tool") ? ItemSources.fromJson(json.get("tool")) : null);
         Optional<BlockState> blockState = Optional.ofNullable(json.has("block_state") ? CraftingHelper.getNBT(GsonHelper.getAsJsonObject(json, "block_state")) : null).map(nbt -> {
             HolderGetter<Block> holderGetter = BuiltInRegistries.BLOCK.asLookup();
             return NbtUtils.readBlockState(holderGetter, nbt);
         });
 
-        return new LootParams(tool, blockState);
+        return new ExtraLootParams(tool, blockState);
     }
 }

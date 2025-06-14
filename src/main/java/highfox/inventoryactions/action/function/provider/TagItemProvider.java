@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import highfox.inventoryactions.api.action.IActionContext;
 import highfox.inventoryactions.api.itemprovider.ItemProviderType;
 import highfox.inventoryactions.api.itemprovider.LootFunctionsProvider;
-import highfox.inventoryactions.api.util.LootParams;
+import highfox.inventoryactions.api.util.ExtraLootParams;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.Util;
 import net.minecraft.tags.TagKey;
@@ -30,7 +30,7 @@ public class TagItemProvider extends LootFunctionsProvider {
     private final Optional<NumberProvider> amountProvider;
     private final Supplier<ObjectArrayList<Item>> tagContents;
 
-    public TagItemProvider(LootItemFunction[] modifiers, LootParams params, TagKey<Item> tagKey, Optional<NumberProvider> amountProvider) {
+    public TagItemProvider(LootItemFunction[] modifiers, ExtraLootParams params, TagKey<Item> tagKey, Optional<NumberProvider> amountProvider) {
         super(modifiers, params);
         this.tagKey = tagKey;
         this.amountProvider = amountProvider;
@@ -70,7 +70,7 @@ public class TagItemProvider extends LootFunctionsProvider {
     public static class Deserializer extends BaseSerializer<TagItemProvider> {
 
         @Override
-        public TagItemProvider fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, LootParams params) {
+        public TagItemProvider fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, ExtraLootParams params) {
             TagKey<Item> tagKey = TagKey.create(ForgeRegistries.Keys.ITEMS, parseId(GsonHelper.getAsString(json, "tag")));
             Optional<NumberProvider> amountProvider = Optional.ofNullable(GsonHelper.getAsObject(json, "amount", null, context, NumberProvider.class));
 

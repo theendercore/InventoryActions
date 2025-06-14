@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import highfox.inventoryactions.api.action.IActionContext;
 import highfox.inventoryactions.api.itemprovider.ItemProviderType;
 import highfox.inventoryactions.api.itemprovider.LootFunctionsProvider;
-import highfox.inventoryactions.api.util.LootParams;
+import highfox.inventoryactions.api.util.ExtraLootParams;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Holder.Reference;
@@ -22,7 +22,7 @@ import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
 public class SimpleItemProvider extends LootFunctionsProvider {
     protected final Holder<Item> item;
 
-    public SimpleItemProvider(LootItemFunction[] modifiers, LootParams params, Holder<Item> item) {
+    public SimpleItemProvider(LootItemFunction[] modifiers, ExtraLootParams params, Holder<Item> item) {
         super(modifiers, params);
         this.item = item;
     }
@@ -40,7 +40,7 @@ public class SimpleItemProvider extends LootFunctionsProvider {
     public static class Deserializer extends BaseSerializer<SimpleItemProvider> {
 
         @Override
-        public SimpleItemProvider fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, LootParams params) {
+        public SimpleItemProvider fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, ExtraLootParams params) {
             ResourceLocation itemName = parseId(GsonHelper.getAsString(json, "item"));
             Reference<Item> holder = ForgeRegistries.ITEMS.getDelegate(itemName).orElseThrow(() -> {
                 return new IllegalArgumentException("Unknown item: " + itemName);

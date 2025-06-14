@@ -6,7 +6,7 @@ import highfox.inventoryactions.api.action.IActionContext;
 import highfox.inventoryactions.api.itemprovider.IItemProvider;
 import highfox.inventoryactions.api.itemprovider.ItemProviderType;
 import highfox.inventoryactions.api.itemprovider.LootFunctionsProvider;
-import highfox.inventoryactions.api.util.LootParams;
+import highfox.inventoryactions.api.util.ExtraLootParams;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
@@ -16,7 +16,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 public class GroupProvider extends LootFunctionsProvider {
     private final IItemProvider[] providers;
 
-    public GroupProvider(LootItemFunction[] functions, LootParams params, IItemProvider[] providers) {
+    public GroupProvider(LootItemFunction[] functions, ExtraLootParams params, IItemProvider[] providers) {
         super(functions, params);
         this.providers = providers;
     }
@@ -43,7 +43,7 @@ public class GroupProvider extends LootFunctionsProvider {
     public static class Deserializer extends BaseSerializer<GroupProvider> {
 
         @Override
-        public GroupProvider fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, LootParams params) {
+        public GroupProvider fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, ExtraLootParams params) {
             IItemProvider[] providers = GsonHelper.getAsObject(json, "providers", context, IItemProvider[].class);
 
             return new GroupProvider(functions, params, providers);

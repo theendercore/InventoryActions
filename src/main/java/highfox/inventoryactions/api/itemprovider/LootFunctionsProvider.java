@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import highfox.inventoryactions.action.function.ApplyModifiersFunction;
 import highfox.inventoryactions.api.action.IActionContext;
 import highfox.inventoryactions.api.serialization.IDeserializer;
-import highfox.inventoryactions.api.util.LootParams;
+import highfox.inventoryactions.api.util.ExtraLootParams;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
@@ -21,9 +21,9 @@ import java.util.List;
  */
 public abstract class LootFunctionsProvider implements IItemProvider {
     protected final LootItemFunction[] functions;
-    protected final LootParams params;
+    protected final ExtraLootParams params;
 
-    public LootFunctionsProvider(LootItemFunction[] functions, LootParams params) {
+    public LootFunctionsProvider(LootItemFunction[] functions, ExtraLootParams params) {
         this.functions = functions;
         this.params = params;
     }
@@ -52,7 +52,7 @@ public abstract class LootFunctionsProvider implements IItemProvider {
         @Override
         public T fromJson(JsonObject json, JsonDeserializationContext context) {
             LootItemFunction[] functions = GsonHelper.getAsObject(json, "functions", new LootItemFunction[0], context, LootItemFunction[].class);
-            LootParams params = LootParams.fromJson(json);
+            ExtraLootParams params = ExtraLootParams.fromJson(json);
 
             return this.fromJson(json, context, functions, params);
         }
@@ -62,7 +62,7 @@ public abstract class LootFunctionsProvider implements IItemProvider {
             throw new UnsupportedOperationException();
         }
 
-        public abstract T fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, LootParams params);
+        public abstract T fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, ExtraLootParams params);
 
     }
 

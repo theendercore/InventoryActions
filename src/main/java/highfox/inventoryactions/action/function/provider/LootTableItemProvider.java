@@ -6,29 +6,30 @@ import highfox.inventoryactions.api.action.IActionContext;
 import highfox.inventoryactions.api.itemprovider.IItemProvider;
 import highfox.inventoryactions.api.itemprovider.ItemProviderType;
 import highfox.inventoryactions.api.serialization.IDeserializer;
-import highfox.inventoryactions.api.util.LootParams;
+import highfox.inventoryactions.api.util.ExtraLootParams;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
 
 public class LootTableItemProvider implements IItemProvider {
     private final ResourceLocation tableLocation;
-    private final LootParams params;
+    private final ExtraLootParams params;
 
-    public LootTableItemProvider(ResourceLocation tableLocation, LootParams params) {
+    public LootTableItemProvider(ResourceLocation tableLocation, ExtraLootParams params) {
         this.tableLocation = tableLocation;
         this.params = params;
     }
 
     @Override
     public void addItems(IActionContext context, RandomSource random, ObjectArrayList<ItemStack> results) {
-        net.minecraft.world.level.storage.loot.LootParams lootParams = context.getVanillaLootPrams(this.params.getTool(context), this.params.getBlockState());
+        LootParams lootParams = context.getLootPrams(this.params.getTool(context), this.params.getBlockState());
         LootTable table = context.getLevel().getServer().getLootData().getLootTable(this.tableLocation);
         if (table == LootTable.EMPTY) {
             throw new IllegalArgumentException("Unknown loot table: " + this.tableLocation);
@@ -48,7 +49,7 @@ public class LootTableItemProvider implements IItemProvider {
         @Override
         public LootTableItemProvider fromJson(JsonObject json, JsonDeserializationContext context) {
             ResourceLocation tableLocation = parseId(GsonHelper.getAsString(json, "loot_table"));
-            LootParams params = LootParams.fromJson(json);
+            ExtraLootParams params = ExtraLootParams.fromJson(json);
 
             return new LootTableItemProvider(tableLocation, params);
         }
