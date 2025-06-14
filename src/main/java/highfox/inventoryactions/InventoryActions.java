@@ -30,47 +30,47 @@ import net.minecraftforge.registries.RegistryObject;
 
 @Mod(ActionsConstants.MODID)
 public class InventoryActions {
-	private static final DeferredRegister<SoundEvent> DEFERRED_SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, ActionsConstants.MODID);
-	public static final RegistryObject<SoundEvent> SOLIDIFY_CONCRETE = DEFERRED_SOUND_EVENTS.register("solidify_concrete", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(ActionsConstants.MODID, "solidify_concrete")));
+    private static final DeferredRegister<SoundEvent> DEFERRED_SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, ActionsConstants.MODID);
+    public static final RegistryObject<SoundEvent> SOLIDIFY_CONCRETE = DEFERRED_SOUND_EVENTS.register("solidify_concrete", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(ActionsConstants.MODID, "solidify_concrete")));
 
-	public InventoryActions() {
-		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ActionConfig.GENERAL_SPEC, "inventory-actions.toml");
-		MinecraftForge.EVENT_BUS.register(this);
+    public InventoryActions() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ActionConfig.GENERAL_SPEC, "inventory-actions.toml");
+        MinecraftForge.EVENT_BUS.register(this);
 
-		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-		bus.addListener(this::commonSetup);
-		if (FMLEnvironment.dist == Dist.CLIENT) {
-			DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InventoryActionsClient::init);
-		}
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        bus.addListener(this::commonSetup);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InventoryActionsClient::init);
+        }
 
-		DEFERRED_SOUND_EVENTS.register(bus);
-		ItemProviderTypes.DEFERRED_PROVIDER_SERIALIZERS.register(bus);
-		ActionConditionTypes.DEFERRED_CONDITION_SERIALIZERS.register(bus);
-		ActionFunctionTypes.DEFERRED_FUNCTION_SERIALIZERS.register(bus);
-	}
+        DEFERRED_SOUND_EVENTS.register(bus);
+        ItemProviderTypes.DEFERRED_PROVIDER_SERIALIZERS.register(bus);
+        ActionConditionTypes.DEFERRED_CONDITION_SERIALIZERS.register(bus);
+        ActionFunctionTypes.DEFERRED_FUNCTION_SERIALIZERS.register(bus);
+    }
 
-	public void commonSetup(FMLCommonSetupEvent event) {
-		event.enqueueWork(ActionsNetwork::init);
-	}
+    public void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(ActionsNetwork::init);
+    }
 
-	@SubscribeEvent
-	public void addReloadListeners(AddReloadListenerEvent event) {
-		event.addListener(new ActionsManager());
-	}
+    @SubscribeEvent
+    public void addReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(new ActionsManager());
+    }
 
-	@SubscribeEvent
-	public void syncData(OnDatapackSyncEvent event) {
-		if (event.getPlayer() != null) {
-			ServerPlayer player = event.getPlayer();
-			if (!player.connection.connection.isMemoryConnection()) {
-				ActionsNetwork.sendToPlayer(player, ActionsManager.getSyncMessage());
-			}
-		} else {
-			PlayerList playerList = event.getPlayerList();
-			if (!playerList.getServer().isSingleplayer()) {
-				ActionsNetwork.CHANNEL.send(PacketDistributor.ALL.noArg(), ActionsManager.getSyncMessage());
-			}
-		}
-	}
+    @SubscribeEvent
+    public void syncData(OnDatapackSyncEvent event) {
+        if (event.getPlayer() != null) {
+            ServerPlayer player = event.getPlayer();
+            if (!player.connection.connection.isMemoryConnection()) {
+                ActionsNetwork.sendToPlayer(player, ActionsManager.getSyncMessage());
+            }
+        } else {
+            PlayerList playerList = event.getPlayerList();
+            if (!playerList.getServer().isSingleplayer()) {
+                ActionsNetwork.CHANNEL.send(PacketDistributor.ALL.noArg(), ActionsManager.getSyncMessage());
+            }
+        }
+    }
 
 }

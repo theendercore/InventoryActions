@@ -1,11 +1,7 @@
 package highfox.inventoryactions.action.function;
 
-import java.util.List;
-import java.util.Queue;
-
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-
 import highfox.inventoryactions.api.action.IActionContext;
 import highfox.inventoryactions.api.function.ActionFunctionType;
 import highfox.inventoryactions.api.function.IActionFunction;
@@ -18,71 +14,74 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.List;
+import java.util.Queue;
+
 public class GiveItemsFunction implements IActionFunction {
-	private final List<IItemProvider> providers;
+    private final List<IItemProvider> providers;
 
-	public GiveItemsFunction(List<IItemProvider> providers) {
-		this.providers = providers;
-	}
+    public GiveItemsFunction(List<IItemProvider> providers) {
+        this.providers = providers;
+    }
 
-	@Override
-	public void run(Queue<Runnable> workQueue, IActionContext context) {
-		ObjectArrayList<ItemStack> stacks = new ObjectArrayList<ItemStack>();
+    @Override
+    public void run(Queue<Runnable> workQueue, IActionContext context) {
+        ObjectArrayList<ItemStack> stacks = new ObjectArrayList<ItemStack>();
 
-		if (!context.getLevel().isClientSide()) {
-			this.providers.stream().forEach(provider -> {
-				provider.addItems(context, context.getRandom(), stacks);
-			});
-		}
+        if (!context.getLevel().isClientSide()) {
+            this.providers.stream().forEach(provider -> {
+                provider.addItems(context, context.getRandom(), stacks);
+            });
+        }
 
-		workQueue.add(() -> {
-			for (ItemStack stack : stacks) {
-				giveItem(stack, context);
-			}
+        workQueue.add(() -> {
+            for (ItemStack stack : stacks) {
+                giveItem(stack, context);
+            }
 
-			if (!stacks.isEmpty()) {
-				Player player = context.getPlayer();
-				if (player.hasContainerOpen()) {
-					player.containerMenu.broadcastChanges();
-				} else {
-					player.inventoryMenu.broadcastChanges();
-				}
-			}
-		});
-	}
+            if (!stacks.isEmpty()) {
+                Player player = context.getPlayer();
+                if (player.hasContainerOpen()) {
+                    player.containerMenu.broadcastChanges();
+                } else {
+                    player.inventoryMenu.broadcastChanges();
+                }
+            }
+        });
+    }
 
-	public static void giveItem(ItemStack stack, IActionContext context) {
-		Player player = context.getPlayer();
+    public static void giveItem(ItemStack stack, IActionContext context) {
+        Player player = context.getPlayer();
 
-		if (!stack.isStackable() && (!context.getSlot().hasItem() || context.getUsing().isEmpty())) {
-			if (!context.getSlot().hasItem()) {
-				context.getSlot().set(stack);
-			} else {
-				player.containerMenu.setCarried(stack);
-			}
-		} else if (!player.addItem(stack)) {
-			player.drop(stack, false);
-		}
-	}
+        if (!stack.isStackable() && (!context.getSlot().hasItem() || context.getUsing().isEmpty())) {
+            if (!context.getSlot().hasItem()) {
+                context.getSlot().set(stack);
+            } else {
+                player.containerMenu.setCarried(stack);
+            }
+        } else if (!player.addItem(stack)) {
+            player.drop(stack, false);
+        }
+    }
 
-	@Override
-	public ActionFunctionType getType() {
-		return ActionFunctionTypes.GIVE_ITEMS.get();
-	}
+    @Override
+    public ActionFunctionType getType() {
+        return ActionFunctionTypes.GIVE_ITEMS.get();
+    }
 
-	public static class Deserializer implements IDeserializer<GiveItemsFunction> {
+    public static class Deserializer implements IDeserializer<GiveItemsFunction> {
 
-		@Override
-		public GiveItemsFunction fromJson(JsonObject json, JsonDeserializationContext context) {
-			List<IItemProvider> providers = context.deserialize(GsonHelper.getAsJsonArray(json, "items"), SerializationUtils.ITEM_PROVIDER_LIST_TYPE);
+        @Override
+        public GiveItemsFunction fromJson(JsonObject json, JsonDeserializationContext context) {
+            List<IItemProvider> providers = context.deserialize(GsonHelper.getAsJsonArray(json, "items"), SerializationUtils.ITEM_PROVIDER_LIST_TYPE);
 
-			return new GiveItemsFunction(providers);
-		}
+            return new GiveItemsFunction(providers);
+        }
 
-		@Override
-		public GiveItemsFunction fromNetwork(FriendlyByteBuf buffer) {
-			throw new UnsupportedOperationException();
-		}
+        @Override
+        public GiveItemsFunction fromNetwork(FriendlyByteBuf buffer) {
+            throw new UnsupportedOperationException();
+        }
 
-	}
+    }
 }

@@ -12,23 +12,23 @@ import net.minecraftforge.registries.DeferredRegister;
  * A type of function serializer
  */
 public class ActionFunctionType extends TypeDeserializer<IActionFunction> {
-	/**
-	 * The function serializers registry key. Use with {@link DeferredRegister} to
-	 * register custom functions
-	 *
-	 * <pre>
-	 * DeferredRegister.create(ActionFunctionType.FUNCTION_SERIALIZERS_KEY, modid);
-	 * </pre>
-	 */
-	public static final ResourceKey<Registry<ActionFunctionType>> FUNCTION_SERIALIZERS_KEY = ResourceKey.createRegistryKey(new ResourceLocation(ActionsConstants.MODID, "function_serializers"));
+    /**
+     * The function serializers registry key. Use with {@link DeferredRegister} to
+     * register custom functions
+     *
+     * <pre>
+     * DeferredRegister.create(ActionFunctionType.FUNCTION_SERIALIZERS_KEY, modid);
+     * </pre>
+     */
+    public static final ResourceKey<Registry<ActionFunctionType>> FUNCTION_SERIALIZERS_KEY = ResourceKey.createRegistryKey(new ResourceLocation(ActionsConstants.MODID, "function_serializers"));
 
-	/**
-	 * Constructs a function deserializer type
-	 *
-	 * @param deserializer the function deserializer
-	 */
-	public ActionFunctionType(IDeserializer<? extends IActionFunction> deserializer) {
-		super(deserializer);
-	}
+    /**
+     * Constructs a function deserializer type
+     *
+     * @param deserializer the function deserializer
+     */
+    public ActionFunctionType(IDeserializer<? extends IActionFunction> deserializer) {
+        super(deserializer);
+    }
 
 }
