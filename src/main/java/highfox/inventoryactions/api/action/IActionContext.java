@@ -65,7 +65,8 @@ public interface IActionContext {
      *
      * @return a loot context
      * @throws IllegalStateException if called on the client
-     * @see {@link #getLootContext(ItemStack, BlockState)}
+     * @see #getLootContext(ItemStack, BlockState)
+     * @see #getLootPrams(ItemStack, BlockState)
      */
     default LootContext getLootContext() {
         return this.getLootContext(ItemStack.EMPTY, null);
@@ -80,11 +81,12 @@ public interface IActionContext {
      *                   the {@link LootContextParams#BLOCK_STATE BLOCK_STATE} param
      * @return a loot context
      * @throws IllegalStateException if called on the client
+     * @see #getLootPrams(ItemStack, BlockState)
      */
     LootContext getLootContext(ItemStack tool, BlockState blockState);
 
     /**
-     * Creates a LootParams for use with a {@link LootContextUser LootContextUser}.
+     * Creates a LootParams.
      * <p>This must only be called when on the <b>server</b>
      *
      * @param tool       the item to use as the {@link LootContextParams#TOOL TOOL} param

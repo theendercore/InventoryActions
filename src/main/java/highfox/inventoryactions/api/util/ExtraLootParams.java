@@ -35,12 +35,8 @@ public class ExtraLootParams {
     }
 
     public void toNetwork(FriendlyByteBuf buffer) {
-        buffer.writeOptional(this.toolParam, (buf, source) -> {
-            buf.writeUtf(ItemSources.getName(source));
-        });
-        buffer.writeOptional(this.blockStateParam, (buf, blockState) -> {
-            buf.writeNbt(NbtUtils.writeBlockState(blockState));
-        });
+        buffer.writeOptional(this.toolParam, (buf, source) -> buf.writeUtf(ItemSources.getName(source)));
+        buffer.writeOptional(this.blockStateParam, (buf, blockState) -> buf.writeNbt(NbtUtils.writeBlockState(blockState)));
     }
 
     @SuppressWarnings("deprecation")
