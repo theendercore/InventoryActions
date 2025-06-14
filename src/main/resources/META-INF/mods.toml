@@ -9,7 +9,7 @@ license="MIT License"
     displayName="Inventory Actions"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/inventory-actions"
     logoFile="logo.png"
-    authors="HighFox"
+    authors="HighFox, TheEnderCore"
     description='''
     Allows various interactions between blocks and items to be performed within the inventory.
     '''
