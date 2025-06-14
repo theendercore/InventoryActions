@@ -78,28 +78,6 @@ jar {
     finalizedBy 'reobfJar'
 }
 
-task apiJar(type: Jar) {
-    dependsOn(classes)
-    include "${project.author}/${project.mod_id}/api/**"
-    from sourceSets.main.allSource
-    from sourceSets.main.output
-//    classifier = 'api'
-}
-
-task sourcesJar(type: Jar) {
-    dependsOn(classes)
-//    classifier = 'sources'
-    from sourceSets.main.allJava
-}
-
-tasks.build.dependsOn apiJar, sourcesJar
-
-artifacts {
-    archives apiJar
-    archives sourcesJar
-    archives jar
-}
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
     options.release = 17
