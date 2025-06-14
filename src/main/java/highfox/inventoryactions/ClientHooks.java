@@ -42,6 +42,7 @@ public class ClientHooks {
         Minecraft minecraft = Minecraft.getInstance();
         List<Slot> slots = screen.getMenu().slots;
         ItemStack carriedStack = screen.getMenu().getCarried();
+        if (carriedStack.isEmpty()) return;
 
         if (ActionConfig.displayIconForValidActions.get() && minecraft.player != null && !(screen instanceof CreativeModeInventoryScreen)) {
             PoseStack matrix = event.getPoseStack();
@@ -51,12 +52,12 @@ public class ClientHooks {
             matrix.scale(ICON_SCALE, ICON_SCALE, 1.0F);
             matrix.translate(0.0D, 0.0D, 300.0D);
 
-            for (int i = 0; i < slots.size(); i++) {
-                Slot slot = slots.get(i);
+            for (Slot slot : slots) {
                 ItemStack targetStack = slot.getItem();
+                if (targetStack.isEmpty()) continue;
                 IActionContext context = new ActionContext(targetStack, carriedStack, slot, minecraft.player);
 
-                if (!targetStack.isEmpty() && !carriedStack.isEmpty() && ActionsManager.getActionForContext(context).isPresent()) {
+                if (ActionsManager.getActionForContext(context).isPresent()) {
                     int x = slot.x;
                     int y = slot.y;
 
