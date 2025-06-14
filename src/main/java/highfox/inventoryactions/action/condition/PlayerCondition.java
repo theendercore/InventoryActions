@@ -45,7 +45,7 @@ public class PlayerCondition implements IActionCondition {
     public boolean test(IActionContext context) {
         Player player = context.getPlayer();
 
-        if (this.dimension.isPresent() && !player.getLevel().dimension().equals(this.dimension.get())) {
+        if (this.dimension.isPresent() && !player.level().dimension().equals(this.dimension.get())) {
             return false;
         }
 

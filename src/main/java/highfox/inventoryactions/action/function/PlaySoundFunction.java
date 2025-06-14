@@ -41,7 +41,7 @@ public class PlaySoundFunction implements IActionFunction {
         Player player = context.getPlayer();
 
         workQueue.add(() -> {
-            player.getLevel().playSound((Player) null, player.getX(), player.getY(), player.getZ(), this.sound.get(), this.category, this.volume, this.pitch);
+            player.level().playSound((Player) null, player.getX(), player.getY(), player.getZ(), this.sound.get(), this.category, this.volume, this.pitch);
         });
     }
 

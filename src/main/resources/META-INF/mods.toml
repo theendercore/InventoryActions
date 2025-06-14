@@ -24,6 +24,6 @@ license="MIT License"
 [[dependencies.inventoryactions]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.3]"
+    versionRange="[1.20.1]"
     ordering="NONE"
     side="BOTH"

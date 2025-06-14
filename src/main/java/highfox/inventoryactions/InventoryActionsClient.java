@@ -1,14 +1,13 @@
 package highfox.inventoryactions;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.blaze3d.vertex.PoseStack;
 import highfox.inventoryactions.action.InventoryAction;
 import highfox.inventoryactions.api.util.ActionsConstants;
 import highfox.inventoryactions.data.ActionsManager;
 import highfox.inventoryactions.network.message.SyncActionsMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.screens.Screen;
@@ -21,13 +20,15 @@ import net.minecraft.world.level.GameType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.jetbrains.annotations.NotNull;
 
 @OnlyIn(Dist.CLIENT)
 public class InventoryActionsClient {
 
-    public static void init() {
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenFactory.class, () -> new ConfigScreenFactory((minecraft, screen) -> new ConfigScreen(screen)));
+    public static void init(FMLJavaModLoadingContext context) {
+       context.registerExtensionPoint(ConfigScreenFactory.class, () -> new ConfigScreenFactory((minecraft, screen) -> new ConfigScreen(screen)));
     }
 
     public static void syncActions(SyncActionsMessage msg) {
@@ -76,11 +77,11 @@ public class InventoryActionsClient {
         }
 
         @Override
-        public void render(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-            this.renderBackground(matrix);
-            this.optionsList.render(matrix, mouseX, mouseY, partialTicks);
-            GuiComponent.drawCenteredString(matrix, this.font, TITLE.getVisualOrderText(), this.width / 2, 13, 0xFFFFFF);
-            super.render(matrix, mouseX, mouseY, partialTicks);
+        public void render(@NotNull GuiGraphics gui, int mouseX, int mouseY, float partialTicks) {
+            this.renderBackground(gui);
+            this.optionsList.render(gui, mouseX, mouseY, partialTicks);
+            gui.drawCenteredString(this.font, TITLE.getVisualOrderText(), this.width / 2, 13, 0xFFFFFF);
+            super.render(gui, mouseX, mouseY, partialTicks);
         }
 
     }

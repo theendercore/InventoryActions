@@ -15,8 +15,6 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -34,14 +32,14 @@ public class InventoryActions {
     private static final DeferredRegister<SoundEvent> DEFERRED_SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, ActionsConstants.MODID);
     public static final RegistryObject<SoundEvent> SOLIDIFY_CONCRETE = DEFERRED_SOUND_EVENTS.register("solidify_concrete", () -> SoundEvent.createVariableRangeEvent(modId("solidify_concrete")));
 
-    public InventoryActions() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ActionConfig.GENERAL_SPEC, "inventory-actions.toml");
+    public InventoryActions(FMLJavaModLoadingContext context) {
+        context.registerConfig(ModConfig.Type.CLIENT, ActionConfig.GENERAL_SPEC, "inventory-actions.toml");
         MinecraftForge.EVENT_BUS.register(this);
 
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus bus = context.getModEventBus();
         bus.addListener(this::commonSetup);
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> InventoryActionsClient::init);
+            InventoryActionsClient.init(context);
         }
 
         DEFERRED_SOUND_EVENTS.register(bus);

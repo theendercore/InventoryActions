@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
@@ -56,7 +57,7 @@ public class ActionContext implements IActionContext {
 
     @Override
     public Level getLevel() {
-        return this.getPlayer().getLevel();
+        return this.getPlayer().level();
     }
 
     @Override
@@ -73,13 +74,21 @@ public class ActionContext implements IActionContext {
         if (this.getLevel().isClientSide()) {
             throw new IllegalStateException("Attempted to create loot context on the client");
         }
+        LootContext.Builder builder = new LootContext.Builder(getVanillaLootPrams(tool, blockState));
+        return builder.create(null);
+    }
 
-        LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.getLevel())
+    @Override
+    public LootParams getVanillaLootPrams(ItemStack tool, BlockState blockState) {
+        if (this.getLevel().isClientSide()) {
+            throw new IllegalStateException("Attempted to create loot context on the client");
+        }
+
+        LootParams.Builder builder = new LootParams.Builder((ServerLevel) this.getLevel())
                 .withParameter(LootContextParams.THIS_ENTITY, this.player)
                 .withParameter(LootContextParams.ORIGIN, this.player.position())
                 .withOptionalParameter(LootContextParams.BLOCK_STATE, blockState)
-                .withLuck(this.player.getLuck())
-                .withRandom(this.getRandom());
+                .withLuck(this.player.getLuck());
 
         if (!tool.isEmpty()) {
             builder = builder.withOptionalParameter(LootContextParams.TOOL, tool);

@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -57,8 +58,8 @@ public class CraftingFunction implements IActionFunction {
         }
 
         Player player = context.getPlayer();
-        Level level = player.getLevel();
-        Optional<ItemStack> result = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, container, level).map(recipe -> recipe.assemble(container));
+        Level level = player.level();
+        Optional<ItemStack> result = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, container, level).map(recipe -> recipe.assemble(container, level.registryAccess()));
         if (result.isEmpty()) {
             throw new IllegalArgumentException("Input items do not have a crafting recipe result");
         }
@@ -72,7 +73,7 @@ public class CraftingFunction implements IActionFunction {
     }
 
     private CraftingContainer makeCraftingContainer(int width, int height) {
-        CraftingContainer container = new CraftingContainer(new AbstractContainerMenu((MenuType<?>) null, -1) {
+        CraftingContainer container = new TransientCraftingContainer(new AbstractContainerMenu((MenuType<?>) null, -1) {
             @Override
             public ItemStack quickMoveStack(Player p_218264_, int p_218265_) {
                 return ItemStack.EMPTY;

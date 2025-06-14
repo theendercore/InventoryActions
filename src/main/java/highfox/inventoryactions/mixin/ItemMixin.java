@@ -21,7 +21,7 @@ public class ItemMixin {
         if (!callback.getReturnValueZ() && clickAction == ClickAction.SECONDARY) {
             IActionContext context = new ActionContext(slot.getItem(), stack, slot, player);
             ActionsManager.getActionForContext(context).ifPresent(action -> {
-                if (!player.getLevel().isClientSide()) {
+                if (!player.level().isClientSide()) {
                     action.runAction(context);
                 }
                 callback.setReturnValue(true);

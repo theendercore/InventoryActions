@@ -9,6 +9,7 @@ import highfox.inventoryactions.api.util.ActionsConstants;
 import highfox.inventoryactions.data.ActionsManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -45,7 +46,7 @@ public class ClientHooks {
         if (carriedStack.isEmpty()) return;
 
         if (ActionConfig.displayIconForValidActions.get() && minecraft.player != null && !(screen instanceof CreativeModeInventoryScreen)) {
-            PoseStack matrix = event.getPoseStack();
+            PoseStack matrix = event.getGuiGraphics().pose();
             RenderSystem.enableDepthTest();
             matrix.pushPose();
             matrix.translate(screen.getGuiLeft(), screen.getGuiTop(), 0.0D);
@@ -62,7 +63,7 @@ public class ClientHooks {
                     int y = slot.y;
 
                     MultiBufferSource.BufferSource bufferSource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-                    minecraft.font.drawInBatch(ICON, x / ICON_SCALE + 18, y / ICON_SCALE, 0xFFFFFF, true, matrix.last().pose(), bufferSource, false, 0, 15728880);
+                    minecraft.font.drawInBatch(ICON, x / ICON_SCALE + 18, y / ICON_SCALE, 0xFFFFFF, true, matrix.last().pose(), bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
                     bufferSource.endBatch();
                 }
             }

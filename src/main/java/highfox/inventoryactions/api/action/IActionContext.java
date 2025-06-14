@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootContextUser;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 /**
@@ -81,5 +82,17 @@ public interface IActionContext {
      * @throws IllegalStateException if called on the client
      */
     LootContext getLootContext(ItemStack tool, BlockState blockState);
+
+    /**
+     * Creates a LootParams for use with a {@link LootContextUser LootContextUser}.
+     * <p>This must only be called when on the <b>server</b>
+     *
+     * @param tool       the item to use as the {@link LootContextParams#TOOL TOOL} param
+     * @param blockState the block state to use as
+     *                   the {@link LootContextParams#BLOCK_STATE BLOCK_STATE} param
+     * @return loot params
+     * @throws IllegalStateException if called on the client
+     */
+    LootParams getVanillaLootPrams(ItemStack tool, BlockState blockState);
 
 }

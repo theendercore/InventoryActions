@@ -13,10 +13,10 @@ public class ActionsConstants {
     }
 
     public static ResourceLocation id(String namespace, String path) {
-        return new ResourceLocation(namespace, path);
+        return ResourceLocation.fromNamespaceAndPath(namespace, path);
     }
 
     public static ResourceLocation parseId(String id) {
-        return new ResourceLocation(id);
+        return ResourceLocation.parse(id);
     }
 }

@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
@@ -29,13 +28,13 @@ public class LootTableItemProvider implements IItemProvider {
 
     @Override
     public void addItems(IActionContext context, RandomSource random, ObjectArrayList<ItemStack> results) {
-        LootContext lootContext = context.getLootContext(this.params.getTool(context), this.params.getBlockState());
-        LootTable table = context.getLevel().getServer().getLootTables().get(this.tableLocation);
+        net.minecraft.world.level.storage.loot.LootParams lootParams = context.getVanillaLootPrams(this.params.getTool(context), this.params.getBlockState());
+        LootTable table = context.getLevel().getServer().getLootData().getLootTable(this.tableLocation);
         if (table == LootTable.EMPTY) {
             throw new IllegalArgumentException("Unknown loot table: " + this.tableLocation);
         }
 
-        ObjectArrayList<ItemStack> rollResults = table.getRandomItems(lootContext);
+        ObjectArrayList<ItemStack> rollResults = table.getRandomItems(lootParams);
         results.addAll(rollResults);
     }
 
