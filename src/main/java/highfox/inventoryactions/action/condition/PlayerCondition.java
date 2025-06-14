@@ -28,6 +28,7 @@ import java.util.Optional;
 
 import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class PlayerCondition implements IActionCondition {
     private final Optional<ResourceKey<Level>> dimension;
     private final Optional<GameType> gameMode;

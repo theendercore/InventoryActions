@@ -42,9 +42,8 @@ public class SimpleItemProvider extends LootFunctionsProvider {
         @Override
         public SimpleItemProvider fromJson(JsonObject json, JsonDeserializationContext context, LootItemFunction[] functions, ExtraLootParams params) {
             ResourceLocation itemName = parseId(GsonHelper.getAsString(json, "item"));
-            Reference<Item> holder = ForgeRegistries.ITEMS.getDelegate(itemName).orElseThrow(() -> {
-                return new IllegalArgumentException("Unknown item: " + itemName);
-            });
+            Reference<Item> holder = ForgeRegistries.ITEMS.getDelegate(itemName)
+                    .orElseThrow(() -> new IllegalArgumentException("Unknown item: " + itemName));
 
             return new SimpleItemProvider(functions, params, holder);
         }

@@ -16,6 +16,7 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 
 import java.util.Optional;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class ExtraLootParams {
     private final Optional<IItemSource> toolParam;
     private final Optional<BlockState> blockStateParam;

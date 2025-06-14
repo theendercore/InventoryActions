@@ -38,9 +38,7 @@ public class ApplyModifiersFunction extends ItemSourcingFunction {
         ItemStack stack = this.source.get(context);
         List<LootItemFunction> validFunctions = validateContextParams(Arrays.asList(this.functions));
 
-        workQueue.add(() -> {
-            this.source.setAndUpdate(context, applyModifiers(stack, lootContext, validFunctions));
-        });
+        workQueue.add(() -> this.source.setAndUpdate(context, applyModifiers(stack, lootContext, validFunctions)));
     }
 
     public static ItemStack applyModifiers(ItemStack stack, LootContext lootContext, List<LootItemFunction> functions) {

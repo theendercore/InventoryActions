@@ -20,6 +20,7 @@ import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -64,28 +65,24 @@ public class CraftingFunction implements IActionFunction {
             throw new IllegalArgumentException("Input items do not have a crafting recipe result");
         }
 
-        workQueue.add(() -> {
-            result.ifPresent(stack -> {
-                GiveItemsFunction.giveItem(stack, context);
-                player.awardStat(Stats.ITEM_CRAFTED.get(stack.getItem()), stack.getCount());
-            });
-        });
+        workQueue.add(() -> result.ifPresent(stack -> {
+            GiveItemsFunction.giveItem(stack, context);
+            player.awardStat(Stats.ITEM_CRAFTED.get(stack.getItem()), stack.getCount());
+        }));
     }
 
     private CraftingContainer makeCraftingContainer(int width, int height) {
-        CraftingContainer container = new TransientCraftingContainer(new AbstractContainerMenu((MenuType<?>) null, -1) {
+        return new TransientCraftingContainer(new AbstractContainerMenu(null, -1) {
             @Override
-            public ItemStack quickMoveStack(Player p_218264_, int p_218265_) {
+            public @NotNull ItemStack quickMoveStack(@NotNull Player player, int p_218265_) {
                 return ItemStack.EMPTY;
             }
 
             @Override
-            public boolean stillValid(Player p_29888_) {
+            public boolean stillValid(@NotNull Player player) {
                 return false;
             }
         }, width, height);
-
-        return container;
     }
 
     @Override

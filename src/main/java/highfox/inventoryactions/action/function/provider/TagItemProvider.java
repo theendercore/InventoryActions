@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 
 import static highfox.inventoryactions.api.util.ActionsConstants.parseId;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class TagItemProvider extends LootFunctionsProvider {
     private final TagKey<Item> tagKey;
     private final Optional<NumberProvider> amountProvider;

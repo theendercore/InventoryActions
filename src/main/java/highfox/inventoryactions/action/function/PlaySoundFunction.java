@@ -41,7 +41,7 @@ public class PlaySoundFunction implements IActionFunction {
         Player player = context.getPlayer();
 
         workQueue.add(() -> {
-            player.level().playSound((Player) null, player.getX(), player.getY(), player.getZ(), this.sound.get(), this.category, this.volume, this.pitch);
+            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), this.sound.get(), this.category, this.volume, this.pitch);
         });
     }
 
@@ -56,9 +56,7 @@ public class PlaySoundFunction implements IActionFunction {
         @Override
         public PlaySoundFunction fromJson(JsonObject json, JsonDeserializationContext context) {
             ResourceLocation soundName = parseId(GsonHelper.getAsString(json, "sound"));
-            Reference<SoundEvent> sound = ForgeRegistries.SOUND_EVENTS.getDelegate(soundName).orElseThrow(() -> {
-                return new IllegalArgumentException("Unknown sound event: " + soundName);
-            });
+            Reference<SoundEvent> sound = ForgeRegistries.SOUND_EVENTS.getDelegate(soundName).orElseThrow(() -> new IllegalArgumentException("Unknown sound event: " + soundName));
             SoundSource source = Optional.ofNullable(GsonHelper.getAsString(json, "category", null)).map(sourceName -> {
                 for (SoundSource value : SOUND_SOURCES.get()) {
                     if (value.getName().contentEquals(sourceName)) {

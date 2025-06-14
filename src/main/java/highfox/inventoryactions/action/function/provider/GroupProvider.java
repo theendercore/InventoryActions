@@ -23,7 +23,7 @@ public class GroupProvider extends LootFunctionsProvider {
 
     @Override
     public void addItems(IActionContext context, RandomSource random, ObjectArrayList<ItemStack> results) {
-        ObjectArrayList<ItemStack> toModify = new ObjectArrayList<ItemStack>();
+        ObjectArrayList<ItemStack> toModify = new ObjectArrayList<>();
         for (IItemProvider provider : this.providers) {
             provider.addItems(context, random, provider instanceof LootFunctionsProvider ? toModify : results);
         }
